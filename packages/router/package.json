@@ -1,0 +1,57 @@
+{
+	"name": "@webly/router",
+	"version": "0.0.0",
+	"type": "module",
+	"main": "dist/index.mjs",
+	"author": {
+		"email": "pebrianz117@gmail.com",
+		"name": "pebrianz",
+		"url": "https://github.com/pebrianz"
+	},
+	"license": "Apache-2.0",
+	"homepage": "https://github.com/pebrianz/webly-project#readme",
+	"publishConfig": {
+		"access": "public"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/pebrianz/webly-project.git"
+	},
+	"bugs": {
+		"url": "https://github.com/pebrianz/webly-project/issues"
+	},
+	"files": [
+		"dist",
+		"LICENSE",
+		"README.md"
+	],
+	"keywords": [
+		"html",
+		"web",
+		"router",
+		"webcompoent",
+		"javascript",
+		"js",
+		"frontend"
+	],
+	"exports": {
+		".": {
+			"types": "./types/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/index.umd.cjs"
+		}
+	},
+	"scripts": {
+		"build": "pnpm vite build",
+		"dev": "npm run build && pnpm -w dev router",
+		"test": "npm run build && pnpm -w test router"
+	},
+	"dependencies": {
+		"@webly/rebind": "workspace:*"
+	},
+	"devDependencies": {
+		"dedent": "^1.7.1",
+		"terser": "^5.46.0",
+		"vite": "^7.3.1"
+	}
+}

@@ -1,14 +1,24 @@
 {
 	"name": "webly-project",
 	"private": true,
+	"type": "module",
+	"main": "dist/index.mjs",
 	"author": {
 		"email": "pebrianz117@gmail.com",
 		"name": "pebrianz",
 		"url": "https://github.com/pebrianz"
 	},
+	"files": [
+		"dist",
+		"LICENSE"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
 	"license": "Apache-2.0",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"dev": "vitest",
+		"test": "vitest run"
 	},
 	"repository": {
 		"type": "git",
@@ -28,6 +38,8 @@
 		"@eslint/json": "^0.14.0",
 		"@eslint/markdown": "^7.5.1",
 		"eslint": "^9.39.2",
-		"globals": "^17.0.0"
+		"globals": "^17.0.0",
+		"happy-dom": "^20.3.0",
+		"vitest": "^4.0.17"
 	}
 }
