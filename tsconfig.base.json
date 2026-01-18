@@ -3,8 +3,12 @@
   "compilerOptions": {
     "target": "es2024",
     "module": "esnext",
-    "moduleResolution": "nodenext",
+    "stripInternal": true,
+    "moduleResolution": "bundler",
+    "noEmit": true,
     "checkJs": true,
+    "declaration": true,
+    "allowJs": true,
     "alwaysStrict": true,
     "resolvePackageJsonExports": true,
     "resolvePackageJsonImports": true,

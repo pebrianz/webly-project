@@ -1,7 +1,4 @@
-export function defineComponent(component: CustomElementConstructor): void;
-
 export type Params = Record<string, unknown>;
-
 export type Path = `/${string}`;
 
 export type Routes = Record<
@@ -16,6 +13,3 @@ export type Routes = Record<
 	  }
 >;
 
-export class Router {
-	constructor(root: CustomElementConstructor);
-}

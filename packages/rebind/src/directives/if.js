@@ -1,7 +1,3 @@
-/**
- * @typedef {import("./index.js").Directives} Directives
- */
-
 import json5 from "json5";
 import { watch } from "../reactive.js";
 import { interpolate, parseFunctionCall } from "../utils.js";
@@ -19,7 +15,10 @@ const operators = {
 	"||": (a, b) => !!(a || b),
 };
 
-/** @type {Directives} */
+/**
+ * @internal
+ * @type {import("../types.d.ts").Directives}
+ */
 export default {
 	if: ({ value, scopedState }) => {
 		const [condition, func] = value?.split(/\s*;\s*/) ?? ["false", ""];
@@ -34,7 +33,7 @@ export default {
 			if (!bool) return;
 
 			const [fnName, fnArgs] = parseFunctionCall(func);
-			const fn = scopedState[fnName];
+			const fn = /** @type {Function} */(scopedState[fnName]);
 			if (fn) fn.apply(scopedState, fnArgs);
 		});
 	},

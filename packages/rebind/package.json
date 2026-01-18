@@ -23,7 +23,6 @@
 	"files": [
 		"dist",
 		"LICENSE",
-		"types",
 		"README.md"
 	],
 	"keywords": [
@@ -37,22 +36,14 @@
 	],
 	"exports": {
 		".": {
-			"types": "./types/index.d.ts",
+			"types": "./dist/index.d.ts",
 			"import": "./dist/index.js",
 			"require": "./dist/index.umd.cjs"
 		}
 	},
 	"scripts": {
-		"build": "pnpm vite build",
+		"build": "pnpm vite build & pnpm rollup -c",
 		"dev": "npm run build && pnpm -w dev rebind",
 		"test": "npm run build && pnpm -w test rebind"
-	},
-	"dependencies": {
-		"json5": "^2.2.3"
-	},
-	"devDependencies": {
-		"dedent": "^1.7.1",
-		"terser": "^5.46.0",
-		"vite": "^7.3.1"
 	}
 }

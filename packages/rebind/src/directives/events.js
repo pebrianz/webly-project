@@ -1,7 +1,3 @@
-/**
- * @typedef {import("./index.js").Directives} Directives
- */
-
 import { watch } from "../reactive.js";
 import { createScopedState, parseFunctionCall } from "../utils.js";
 
@@ -113,11 +109,14 @@ const globalEvents =
 		"wheel",
 	];
 
-/** @type {Directives} */
+/**
+ * @internal
+ * @type {import("../types.d.ts").Directives}
+ */
 export default globalEvents.reduce((events, event) => {
 	return Object.assign(
 		events,
-		/** @type {Directives} */ ({
+		/** @type {import("../types.d.ts").Directives} */ ({
 			[`on${event}`]({ element, value, scopes, rootState }) {
 				const handler = /** @param {Event} e */ (e) => {
 					const scopedState = createScopedState([

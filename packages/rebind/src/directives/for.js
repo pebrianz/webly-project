@@ -1,13 +1,11 @@
-/**
- * @typedef {import("./index.js").Directives} Directives
- * @typedef {import("../main.js").NodeWithScopes<HTMLElement>} NodeWithScopes
- */
-
 import json5 from "json5";
 import { Rebind } from "../main.js";
 import { watch } from "../reactive.js";
 
-/** @type {Directives} */
+/**
+ * @internal
+ * @type {import("../types.d.ts").Directives}
+ */
 export default {
 	for: ({ element, value, directives, scopedState }) => {
 		const template = /** @type {HTMLTemplateElement} */ (element);
@@ -25,7 +23,7 @@ export default {
 					template.content.cloneNode(true)
 				);
 				const firstElementChild =
-					/** @type {NodeWithScopes & {template: HTMLTemplateElement}} */ (
+					/** @type {import("../types.d.ts").NodeWithScopes & {template: HTMLTemplateElement}} */ (
 						content.firstElementChild
 					);
 

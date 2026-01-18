@@ -1,10 +1,4 @@
-/**
- * @typedef {import("./main.js").Params} Params
- * @typedef {import("./main.js").Path} Path
- * @typedef {import("./main.js").Routes} Routes
- */
-
-/** @param {CustomElementConstructor} componentConstructor */
+/**@param {CustomElementConstructor} componentConstructor */
 export function defineComponent(componentConstructor) {
 	if (customElements.getName(componentConstructor)) return;
 	customElements.define(
@@ -14,6 +8,7 @@ export function defineComponent(componentConstructor) {
 }
 
 /**
+ * @internal
  * @param {HTMLElement} component
  * @param {NodeListOf<ChildNode>} childNodes
  * @returns {void}
@@ -26,6 +21,7 @@ export function moveChildNodes(component, childNodes) {
 	}
 }
 
+/** @internal */
 export function isClassConstructor(ctr) {
 	if (typeof ctr !== "function") return false;
 	try {
@@ -36,12 +32,16 @@ export function isClassConstructor(ctr) {
 	}
 }
 
-/** @param {string} str */
+/**
+ * @internal
+ * @param {string} str
+ */
 export function toKebabCase(str) {
 	return str.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
 }
 
 /**
+ * @internal
  * @param {string[]} paramNames
  * @param {RegExpMatchArray} match
  * @returns {Params}
@@ -55,6 +55,7 @@ export function extractParams(paramNames, match) {
 }
 
 /**
+ * @internal
  * @param {string} path
  * @returns {RegExp}
  */
@@ -63,6 +64,7 @@ export function createRegexFromDynamicPath(path) {
 }
 
 /**
+ * @internal
  * @param {string} path
  * @returns {string[]}
  */
@@ -73,8 +75,9 @@ export function extractParamNames(path) {
 }
 
 /**
+ * @internal
  * @param {string} path
- * @param {{ path:string } & Routes[Path]} route
+ * @param {{ path:string } & import("./types.d.ts").Routes[import("./types.d.ts").Path]} route
  */
 export function matchPathToDynamicRoute(path, route) {
 	const regex = createRegexFromDynamicPath(route.path);
@@ -90,7 +93,8 @@ export function matchPathToDynamicRoute(path, route) {
 }
 
 /**
- * @param {Routes} routes
+ * @internal
+ * @param {import("./types.d.ts").Routes} routes
  * @param {string} [path]
  */
 export function matchDynamicRoute(routes, path) {

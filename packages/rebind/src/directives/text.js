@@ -1,11 +1,10 @@
-/**
- * @typedef {import("./index.js").Directives} Directives
- */
-
 import { watch } from "../reactive.js";
 import { interpolate } from "../utils.js";
 
-/** @type {Directives} */
+/**
+ * @internal
+ * @type {import("../types.d.ts").Directives}
+ */
 export default {
 	text: ({ element, value, scopedState }) => {
 		watch(() => {

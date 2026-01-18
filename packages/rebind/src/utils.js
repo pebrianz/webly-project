@@ -1,11 +1,7 @@
-/**
- * @typedef {import("./reactive.js").State} State
- */
-
 import json5 from "json5";
 
 /**
- * @param {State[]} scopes
+ * @param {import("./types.d.ts").State[]} scopes
  * @returns {Record<string,unknown>}
  */
 export function createScopedState(scopes) {
@@ -34,10 +30,6 @@ export function createScopedState(scopes) {
 		},
 	);
 }
-
-/**
- * @typedef {ReturnType<typeof createScopedState>} ScopedState
- */
 
 /**
  * @param {string} text

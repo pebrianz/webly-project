@@ -1,6 +1,6 @@
 import dedent from "dedent";
 import { describe, beforeEach, expect, it } from "vitest";
-import { observe, Rebind } from "../../dist/index.js";
+import { observe, Rebind } from "../dist/index.js";
 
 beforeEach(() => {
 	document.body.innerHTML = "";

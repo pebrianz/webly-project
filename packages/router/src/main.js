@@ -1,35 +1,17 @@
-/**
- * @typedef {import("@webly/rebind").Directives} Directives
- * @typedef {import("@webly/rebind").State} State
- */
-
-import { Rebind, observe, watch, createScopedState } from "@webly/rebind";
+import { Rebind, observe, watch } from "@webly/rebind";
 import { isClassConstructor } from "./utils.js";
 import { defineComponent, matchDynamicRoute, moveChildNodes } from "./utils.js";
 
-/**
- * @typedef {Record<string, unknown>} Params
- * @typedef {`/${string}`} Path
- *
- * @typedef {Record<Path,{
- *  component: CustomElementConstructor,
- *  params?: Params,
- * } | {
- *  component: (this: { params: any }) => Promise<CustomElementConstructor>
- *  params?: Params
- * }>} Routes
- */
-
 const navigateType = {
 	/**
-	 * @param {Path} path
+	 * @param {import("./types.d.ts").Path} path
 	 * @param {unknown} data
 	 */
 	replace(path, data) {
 		window.history.replaceState(data, "", path);
 	},
 	/**
-	 * @param {Path} path
+	 * @param {import("./types.d.ts").Path} path
 	 * @param {unknown} data
 	 */
 	push(path, data) {
@@ -44,16 +26,28 @@ const navigateType = {
 };
 
 export class Router {
-	/** @type {HTMLElement} */
+	/**
+	 * @internal
+	 * @type {HTMLElement}
+	 */
 	#root;
 
-	/** @type {Routes} */
+	/**
+	 * @internal
+	 * @type {import("./types.d.ts").Routes}
+	 */
 	#routes;
 
-	/** @type {Params} */
+	/**
+	 * @internal
+	 * @type {import("./types.d.ts").Params}
+	 */
 	#params;
 
-	/** @type {{ view: Routes[keyof Routes]["component"] }} */
+	/**
+	 * @internal
+	 * @type {{ view: import("./types.d.ts").Routes[keyof import("./types.d.ts").Routes]["component"] }}
+	 */
 	#currentRoute = observe({ view: null });
 
 	/** @param {CustomElementConstructor} root */
@@ -63,7 +57,7 @@ export class Router {
 
 		new Rebind(this.#root.shadowRoot)
 			.directives({
-				"router-view": ({  element }) => {
+				"router-view": ({ element }) => {
 					/** @type {((c: HTMLElement) => void) | null} */
 					let update = null;
 
@@ -105,7 +99,7 @@ export class Router {
 			.run();
 	}
 
-	/** @param {Routes} routes */
+	/** @param {import("./types.d.ts").Routes} routes */
 	routes(routes) {
 		this.#routes = routes;
 		return this;
@@ -118,16 +112,20 @@ export class Router {
 
 		root.appendChild(this.#root);
 
-		this.navigate(/** @type {Path} */ (window.location.pathname));
+		this.navigate(
+			/** @type {import("./types.d.ts").Path} */ (window.location.pathname),
+		);
 		window.addEventListener("popstate", () => {
-			const path = /** @type {Path} */ (window.location.pathname);
+			const path = /** @type {import("./types.d.ts").Path} */ (
+				window.location.pathname
+			);
 			this.navigate(path, null, "none");
 		});
 		return this;
 	}
 
 	/**
-	 * @param {Path} path
+	 * @param {import("./types.d.ts").Path} path
 	 * @param {unknown} data
 	 * @param {keyof typeof navigateType} type
 	 */
@@ -136,6 +134,9 @@ export class Router {
 
 		this.#params = route?.params ?? {};
 		this.#currentRoute.view = route.component;
-		navigateType[type](/** @type {Path} */ (path ?? "/"), data);
+		navigateType[type](
+			/** @type {import("./types.d.ts").Path} */ (path ?? "/"),
+			data,
+		);
 	}
 }

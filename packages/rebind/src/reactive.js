@@ -70,7 +70,3 @@ export function observe(target) {
 		},
 	});
 }
-
-/**
- * @typedef {ReturnType<typeof observe>} State
- */

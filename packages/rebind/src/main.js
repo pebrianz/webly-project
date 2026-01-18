@@ -1,41 +1,25 @@
-/**
- * @typedef {import("./reactive.js").State} State
- * @typedef {import("./utils.js").ScopedState} ScopedState
- * @typedef {import("./directives/index.js").Directives} Directives
- * @typedef {import("./directives/index.js").Directive} Directive
- */
-
-/**
- * @template element extends Node
- * @typedef {element & { scopes?: State[]} } NodeWithScopes
- */
-
 import json5 from "json5";
 import { directives } from "./directives/index.js";
 import { observe, watch } from "./reactive.js";
 import { createScopedState, interpolate, parseFunctionCall } from "./utils.js";
 
-/**
- * @typedef {Record<string, unknown>} DirectiveExtraArgs
- * @typedef {{
- *  element: HTMLElement,
- *  scopes: State[],
- *  scopedState: ScopedState,
- *  rootState: State,
- *  directives: Directives,
- *  directiveExtraArgs: DirectiveExtraArgs
- * }} PluginParams
- * @typedef {(params: PluginParams) => DirectiveExtraArgs} Plugin
- */
-
 export class Rebind {
-	/** @type {State} */
+	/**
+	 * @internal
+	 * @type {import("./types.d.ts").State}
+	 */
 	#state = {};
 
-	/** @type {Directives} */
+	/**
+	 * @internal
+	 * @type {import("./types.d.ts").Directives}
+	 */
 	#directives = {};
 
-	/** @type {Plugin[]} */
+	/**
+	 * @internal
+	 * @type {import("./types.d.ts").Plugin[]}
+	 */
 	#plugins = [];
 
 	/** @param {Node | string} selectors */
@@ -44,19 +28,19 @@ export class Rebind {
 			selectors instanceof Node ? selectors : document.querySelector(selectors);
 	}
 
-	/** @param {State[]} state */
+	/** @param {import("./types.d.ts").State[]} state */
 	state(...state) {
 		this.#state = createScopedState(state);
 		return this;
 	}
 
-	/** @param {Directives} directives */
+	/** @param {import("./types.d.ts").Directives} directives */
 	directives(directives) {
 		this.#directives = directives;
 		return this;
 	}
 
-	/** @param {Plugin[]} plugins */
+	/** @param {import("./types.d.ts").Plugin[]} plugins */
 	plugins(plugins) {
 		this.#plugins = plugins;
 		return this;
@@ -67,10 +51,10 @@ export class Rebind {
 		const walker = document.createTreeWalker(this.root, Node.ELEMENT_NODE);
 
 		while (walker.nextNode()) {
-			const currentNode = /** @type {NodeWithScopes<HTMLElement>} */ (
+			const currentNode = /** @type {import("./types.d.ts").NodeWithScopes<HTMLElement>} */ (
 				walker.currentNode
 			);
-			const parentNode = /** @type {NodeWithScopes<HTMLElement>} */ (
+			const parentNode = /** @type {import("./types.d.ts").NodeWithScopes<HTMLElement>} */ (
 				currentNode.parentNode
 			);
 
@@ -98,10 +82,10 @@ export class Rebind {
 				if (fn) fn.apply(scopedState, fnArg);
 			}
 
-			const directiveExtraArgs = /** @type {DirectiveExtraArgs} */({});
+			const directiveExtraArgs = /** @type {import("./types.d.ts").DirectiveExtraArgs} */({});
 
 			for (const plugin of this.#plugins) {
-				/** @type {DirectiveExtraArgs} */
+				/** @type {import("./types.d.ts").DirectiveExtraArgs} */
 				const newDirectiveExtraArts = plugin({
 					element: currentNode,
 					rootState: this.#state,
@@ -126,7 +110,7 @@ export class Rebind {
 					});
 				}
 
-				const directive = /** @type {Directive} */ (
+				const directive = /** @type {import("./types.d.ts").Directive} */ (
 					{ ...directives, ...this.#directives }[name.slice(1)]
 				);
 				if (!directive) continue;

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { interpolate, parseFunctionCall } from "../../dist/index.js";
+import { interpolate, parseFunctionCall } from "../dist/index.js";
 
 describe("utils", async () => {
 	it("should parse function name and arguments and interpolate string argument", () => {
