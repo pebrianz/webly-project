@@ -42,7 +42,8 @@
 		}
 	},
 	"scripts": {
-		"build": "pnpm vite build & pnpm rollup -c",
+		"lint": "tsc",
+		"build": "npm run lint && (pnpm vite build & pnpm rollup -c)",
 		"dev": "npm run build && pnpm -w dev rebind",
 		"test": "npm run build && pnpm -w test rebind"
 	}

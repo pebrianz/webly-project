@@ -6,6 +6,12 @@ import { createScopedState, interpolate, parseFunctionCall } from "./utils.js";
 export class Rebind {
 	/**
 	 * @internal
+	 * @type {Node}
+	 */
+	#root;
+	
+	/**
+	 * @internal
 	 * @type {import("./types.d.ts").State}
 	 */
 	#state = {};
@@ -24,7 +30,7 @@ export class Rebind {
 
 	/** @param {Node | string} selectors */
 	constructor(selectors) {
-		this.root =
+		this.#root =
 			selectors instanceof Node ? selectors : document.querySelector(selectors);
 	}
 
@@ -48,7 +54,7 @@ export class Rebind {
 
 	/** @returns {Promise<void>} */
 	run() {
-		const walker = document.createTreeWalker(this.root, Node.ELEMENT_NODE);
+		const walker = document.createTreeWalker(this.#root, Node.ELEMENT_NODE);
 
 		while (walker.nextNode()) {
 			const currentNode = /** @type {import("./types.d.ts").NodeWithScopes<HTMLElement>} */ (

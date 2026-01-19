@@ -44,10 +44,10 @@ export function toKebabCase(str) {
  * @internal
  * @param {string[]} paramNames
  * @param {RegExpMatchArray} match
- * @returns {Params}
+ * @returns {import("./types.d.ts").Params}
  */
 export function extractParams(paramNames, match) {
-	const params = /** @type {Params} */ ({});
+	const params = /** @type {import("./types.d.ts").Params} */ ({});
 	paramNames.forEach((name, index) => {
 		params[name] = match[index + 1];
 	});

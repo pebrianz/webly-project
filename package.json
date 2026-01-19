@@ -1,22 +1,14 @@
 {
 	"name": "webly-project",
 	"private": true,
-	"type": "module",
-	"main": "dist/index.mjs",
 	"author": {
 		"email": "pebrianz117@gmail.com",
 		"name": "pebrianz",
 		"url": "https://github.com/pebrianz"
 	},
-	"files": [
-		"dist",
-		"LICENSE"
-	],
-	"publishConfig": {
-		"access": "public"
-	},
 	"license": "Apache-2.0",
 	"scripts": {
+		"docs": "typedoc",
 		"dev": "vitest",
 		"test": "vitest run"
 	},
@@ -37,9 +29,19 @@
 		"@eslint/js": "^9.39.2",
 		"@eslint/json": "^0.14.0",
 		"@eslint/markdown": "^7.5.1",
+		"dedent": "^1.7.1",
 		"eslint": "^9.39.2",
 		"globals": "^17.0.0",
 		"happy-dom": "^20.3.0",
+		"rollup": "^4.55.1",
+		"rollup-plugin-dts": "^6.3.0",
+		"terser": "^5.46.0",
+		"typedoc": "^0.28.16",
+		"typescript": "^5.9.3",
+		"vite": "^7.3.1",
 		"vitest": "^4.0.17"
+	},
+	"dependencies": {
+		"json5": "^2.2.3"
 	}
 }
