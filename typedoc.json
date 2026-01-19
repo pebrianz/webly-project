@@ -3,5 +3,8 @@
     "entryPoints": ["packages/*"],
     "packageOptions": {
         "entryPoints": ["src/index.js"]
-    }
+    },
+    "includeVersion": true,
+    "theme": "oxide",
+    "plugin": ["typedoc-theme-oxide"]
 }
