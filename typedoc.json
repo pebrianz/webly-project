@@ -2,9 +2,9 @@
     "entryPointStrategy": "packages",
     "entryPoints": ["packages/*"],
     "packageOptions": {
-        "entryPoints": ["src/index.js"]
+        "entryPoints": ["src/index.js", "src/types.d.ts"]
     },
     "includeVersion": true,
-    "theme": "oxide",
+    "theme": "default",
     "plugin": ["typedoc-theme-oxide"]
 }

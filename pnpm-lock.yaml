@@ -57,6 +57,9 @@ importers:
       typedoc:
         specifier: ^0.28.16
         version: 0.28.16(typescript@5.9.3)
+      typedoc-plugin-dt-links:
+        specifier: ^2.0.38
+        version: 2.0.38(typedoc@0.28.16(typescript@5.9.3))
       typedoc-theme-oxide:
         specifier: ^0.2.0
         version: 0.2.0(typedoc@0.28.16(typescript@5.9.3))
@@ -1597,6 +1600,11 @@ packages:
   type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
     engines: {node: '>= 0.8.0'}
+
+  typedoc-plugin-dt-links@2.0.38:
+    resolution: {integrity: sha512-fcL/bi3lo5T++DS+lX4ZkY52PoDGhUwTJK0TNVQNvd3VeHz6WkiBCozozQhGUjOr3Z2Nfi/UwWe22NF9uC22hA==}
+    peerDependencies:
+      typedoc: 0.28.x
 
   typedoc-theme-oxide@0.2.0:
     resolution: {integrity: sha512-pFas2nzt0hIW5cywU4X7dKCd/9g6sCyM8nyZkzuWusfdJBWMfG8arwaziUYCqUugFcTMKwrZvirp8UqBlR1VXA==}
@@ -3471,6 +3479,10 @@ snapshots:
   type-check@0.4.0:
     dependencies:
       prelude-ls: 1.2.1
+
+  typedoc-plugin-dt-links@2.0.38(typedoc@0.28.16(typescript@5.9.3)):
+    dependencies:
+      typedoc: 0.28.16(typescript@5.9.3)
 
   typedoc-theme-oxide@0.2.0(typedoc@0.28.16(typescript@5.9.3)):
     dependencies:
