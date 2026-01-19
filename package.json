@@ -11,7 +11,10 @@
 		"ci": "pnpm -r run ci",
 		"docs": "typedoc",
 		"dev": "vitest",
-		"test": "vitest run"
+		"test": "vitest run",
+		"version": "pnpm changeset version",
+		"publish": "changeset tag && pnpm publish -r --access public --no-git-checks",
+		"prepublishOnly": "npm run ci"
 	},
 	"repository": {
 		"type": "git",
