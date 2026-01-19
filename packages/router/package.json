@@ -45,7 +45,8 @@
 		"lint": "tsc",
 		"build": "npm run lint && (pnpm vite build & pnpm rollup -c)",
 		"dev": "npm run build && pnpm -w dev router",
-		"test": "npm run build && pnpm -w test router"
+		"test": "pnpm -w test rebind",
+		"ci": "npm run build && npm run test"
 	},
 	"dependencies": {
 		"@webly/rebind": "workspace:*"
