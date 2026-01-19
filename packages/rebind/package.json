@@ -15,7 +15,8 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/pebrianz/webly-project.git"
+		"url": "git+https://github.com/pebrianz/webly-project.git",
+		"directory": "packages/rebind"
 	},
 	"bugs": {
 		"url": "https://github.com/pebrianz/webly-project/issues"
