@@ -1,5 +1,11 @@
 # @webly/router
 
+## 0.2.0
+
+### Minor Changes
+
+- [#9](https://github.com/pebrianz/webly-project/pull/9) [`f70cae1`](https://github.com/pebrianz/webly-project/commit/f70cae196e9515f2d1604ed70070ab8ad1d936e1) Thanks [@pebrianz](https://github.com/pebrianz)! - feat: redesign API
+
 ## 0.1.1
 
 ### Patch Changes
