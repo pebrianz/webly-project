@@ -46,16 +46,15 @@ export class Router {
 
 	/**
 	 * @internal
-	 * @type {{ view: import("./types.d.ts").Routes[keyof import("./types.d.ts").Routes]["component"] }}
+	 * @type {{ view: import("./types.d.ts").Routes[keyof import("./types.d.ts").Routes] }}
 	 */
 	#currentRoute = observe({ view: null });
 
-	/** @param {CustomElementConstructor} root */
+	/** @param {HTMLElement} root */
 	constructor(root) {
-		defineComponent(root);
-		this.#root = new root();
+		this.#root = root;
 
-		new Rebind(this.#root.shadowRoot)
+		new Rebind(this.#root)
 			.directives({
 				"router-view": ({ element }) => {
 					/** @type {((c: HTMLElement) => void) | null} */
@@ -73,25 +72,21 @@ export class Router {
 						);
 
 						if (!isClassConstructor(componentConstructor)) {
-							constr = await componentConstructor.bind({
-								params: this.#params,
-							})();
+							constr = await componentConstructor.call();
 						}
 
 						defineComponent(constr);
 
 						const component = new constr();
 
+						new Rebind(component).state(Object.freeze({ $params: this.#params})).run()
+
 						if (update) return update(component);
-						moveChildNodes(component, element.childNodes);
 
 						element.replaceChildren(component);
 					});
 
 					update = (component) => {
-						if (element.firstElementChild) {
-							moveChildNodes(component, element.firstElementChild.childNodes);
-						}
 						element.replaceChildren(component);
 					};
 				},
@@ -105,13 +100,8 @@ export class Router {
 		return this;
 	}
 
-	/** @param {Node | string} selectors */
-	mount(selectors) {
-		const root =
-			selectors instanceof Node ? selectors : document.querySelector(selectors);
-
-		root.appendChild(this.#root);
-
+	/** @returns {void} */
+	start() {
 		this.navigate(
 			/** @type {import("./types.d.ts").Path} */ (window.location.pathname),
 		);
@@ -121,7 +111,6 @@ export class Router {
 			);
 			this.navigate(path, null, "none");
 		});
-		return this;
 	}
 
 	/**
@@ -130,10 +119,16 @@ export class Router {
 	 * @param {keyof typeof navigateType} type
 	 */
 	navigate(path, data = null, type = "push") {
-		const route = this.#routes[path] ?? matchDynamicRoute(this.#routes, path);
+		const component = this.#routes[path];
 
-		this.#params = route?.params ?? {};
-		this.#currentRoute.view = route.component;
+		if (component != null) {
+			this.#currentRoute.view = component;
+		} else {
+			const route = matchDynamicRoute(this.#routes, path);
+			this.#params = route.params;
+			this.#currentRoute.view = component;
+		}
+
 		navigateType[type](
 			/** @type {import("./types.d.ts").Path} */ (path ?? "/"),
 			data,

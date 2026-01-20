@@ -46,7 +46,7 @@
 		"lint": "tsc",
 		"build": "npm run lint && (pnpm vite build & pnpm rollup -c)",
 		"dev": "npm run build && pnpm -w dev router",
-		"test": "pnpm -w test rebind",
+		"test": "pnpm -w test router",
 		"ci": "npm run build && npm run test"
 	},
 	"dependencies": {
