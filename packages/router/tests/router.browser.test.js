@@ -4,32 +4,21 @@ import { Router } from "../dist/index.js";
 
 describe("router", async () => {
 	it("should render correct component for the given route", async () => {
-		class AppRoot extends HTMLElement {
-			constructor() {
-				super();
-				this.attachShadow({ mode: "open", serializable: true });
-				this.shadowRoot.innerHTML = dedent`<main @router-view><main>`;
-			}
-		}
-
+		document.body.innerHTML = dedent`
+			<main @router-view></main>
+		`
 		class AppHome extends HTMLElement {
 			constructor() {
 				super();
-				this.attachShadow({ mode: "open", serializable: true });
-				this.shadowRoot.innerHTML = dedent`<h1 @text="hello">Hello World</h1>`;
+				this.innerHTML = dedent`<h1 @text="Hello World">hello</h1>`;
 			}
 		}
 
-		new Router(AppRoot)
+		new Router(document.body)
 			.routes({
-				"/": {
-					params: { title: "HomePage" },
-					component: async () => {
-						return AppHome;
-					},
-				},
+				"/":  async () => AppHome,
 			})
-			.mount(document.body);
+			.start();
 
 		await Promise.resolve();
 
@@ -37,14 +26,11 @@ describe("router", async () => {
 			serializableShadowRoots: true,
 		});
 		const expectedResult =
-			dedent`<app-root>` +
-			`<template shadowrootmode="open" shadowrootserializable="">` +
-			`<main @router-view="">` +
+			dedent`<main @router-view="">` +
 			`<app-home>` +
-			`<template shadowrootmode="open" shadowrootserializable="">` +
-			`<h1 @text="hello">Hello World</h1>` +
-			`</template></app-home>` +
-			`</main></template></app-root>`;
+			`<h1 @text="Hello World">Hello World</h1>` +
+			`</app-home>` +
+			`</main>`;
 		expect(renderedResult).toBe(expectedResult);
 	});
 });

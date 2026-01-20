@@ -77,7 +77,10 @@ export function extractParamNames(path) {
 /**
  * @internal
  * @param {string} path
- * @param {{ path:string } & import("./types.d.ts").Routes[import("./types.d.ts").Path]} route
+ * @param {{
+ *  path:string,
+ *  component: import("./types.d.ts").Routes[keyof import("./types.js")]
+ * }} route
  */
 export function matchPathToDynamicRoute(path, route) {
 	const regex = createRegexFromDynamicPath(route.path);
@@ -87,8 +90,7 @@ export function matchPathToDynamicRoute(path, route) {
 	const params = extractParams(paramNames, match);
 	return {
 		component: route.component,
-		path: path,
-		params: { ...route.params, ...params },
+		params,
 	};
 }
 
@@ -100,8 +102,11 @@ export function matchPathToDynamicRoute(path, route) {
 export function matchDynamicRoute(routes, path) {
 	if (!path) return null;
 
-	for (const [routePath, route] of Object.entries(routes)) {
-		const result = matchPathToDynamicRoute(path, { ...route, path: routePath });
+	for (const [routePath, component] of Object.entries(routes)) {
+		const result = matchPathToDynamicRoute(path, {
+			component,
+			path: routePath,
+		});
 		if (!result) continue;
 		return result;
 	}
