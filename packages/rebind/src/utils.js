@@ -1,10 +1,8 @@
-import json5 from "json5";
-
 /**
  * @param {import("./types.d.ts").State[]} scopes
- * @returns {Record<string,unknown>}
+ * @returns {Record<PropertyKey,unknown>}
  */
-export function createScopedState(scopes) {
+export function scopedState(scopes) {
 	return new Proxy(
 		{},
 		{
@@ -31,30 +29,27 @@ export function createScopedState(scopes) {
 	);
 }
 
-/**
- * @param {string} text
- * @param {object} data
- */
-export function interpolate(text, data) {
+/** @type {import("./types.d.ts").interp} */
+export function interp(text, data) {
 	return text.replace(/{([\w_$]+[.\w\d]*)}/g, (substring) => {
 		const keys = substring.slice(1, -1).split(".");
 		let value = Reflect.get(data, keys[0]);
 		let i = 1;
 		while (i < keys.length) {
-			value = Reflect.get(value, keys[i]);
+			value = Reflect.get(data, keys[i]);
 			i++;
 		}
-		return value;
+		return `${value}`;
 	});
 }
 
-/**
- * @param {string} str
- * @returns [string, unknown[]]
- */
-export function parseFunctionCall(str) {
+/** @type {import("./types.d.ts").parseFnCall} */
+export function parseFnCall(
+	str,
+	json = { parse: JSON.parse, reviver: (_, value) => value },
+) {
 	const [name, strArgs] = str.trim().split(/[()]/);
 	if (!name) return ["", []];
-	const args = json5.parse(`[${strArgs.split(",").join(",")}]`);
+	const args = json.parse(`[${strArgs.split(",").join(",")}]`, json.reviver);
 	return [name, args];
 }

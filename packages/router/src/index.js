@@ -1,2 +1,1 @@
-export {Router} from "./main.js"
-export {defineComponent} from "./utils.js"
+export { Router } from "./router.js";

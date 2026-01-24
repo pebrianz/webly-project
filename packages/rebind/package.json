@@ -2,7 +2,6 @@
 	"name": "@webly/rebind",
 	"version": "0.1.1",
 	"type": "module",
-	"main": "dist/index.mjs",
 	"author": {
 		"email": "pebrianz117@gmail.com",
 		"name": "pebrianz",
@@ -36,17 +35,48 @@
 		"frontend"
 	],
 	"exports": {
+		"./bundle": {
+			"types": "./dist/bundle/types/index.d.ts",
+			"import": "./dist/bundle/index.js",
+			"require": "./dist/bundle/index.cjs"
+		},
+		"./min": {
+			"types": "./dist/min/types/index.d.ts",
+			"import": "./dist/min/index.js",
+			"require": "./dist/min/index.cjs"
+		},
 		".": {
-			"types": "./dist/index.d.ts",
-			"import": "./dist/index.js",
-			"require": "./dist/index.umd.cjs"
+			"types": "./dist/es/types/index.d.ts",
+			"import": "./dist/es/index.js",
+			"require": "./dist/es/index.cjs"
+		},
+		"./rebind": {
+			"types": "./dist/es/types/rebind.d.ts",
+			"import": "./dist/es/rebind.js",
+			"require": "./dist/es/rebind.cjs"
+		},
+		"./reactive": {
+			"types": "./dist/es/types/reactive.d.ts",
+			"import": "./dist/es/reactive.js",
+			"require": "./dist/es/reactive.cjs"
+		},
+		"./utils": {
+			"types": "./dist/es/types/utils.d.ts",
+			"import": "./dist/es/utils.js",
+			"require": "./dist/es/utils.cjs"
 		}
 	},
 	"scripts": {
-		"lint": "tsc",
-		"build": "npm run lint && (pnpm vite build & pnpm rollup -c)",
+		"biome:ci": "pnpm -w biome ci packages/rebind",
+		"lint": "npm run biome:ci",
+		"typecheck": "tsc",
+		"build:bundle": "vite build -c vite.config.bundle.js",
+		"build:min": "vite build -c vite.config.min.js",
+		"build:es": "vite build -c vite.config.es.js",
+		"build:types": "rollup -c",
+		"build": "(npm run build:es && npm run build:bundle && npm run build:min) && npm run build:types",
 		"dev": "npm run build && pnpm -w dev rebind",
 		"test": "pnpm -w test rebind",
-		"ci": "npm run build && npm run test"
+		"ci": "npm run lint && npm run typecheck && npm run build && npm run test"
 	}
 }

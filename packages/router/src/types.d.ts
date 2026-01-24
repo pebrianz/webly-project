@@ -5,4 +5,3 @@ export type Routes = Record<
 	Path,
 	CustomElementConstructor | (() => Promise<CustomElementConstructor>)
 >;
-

@@ -1,17 +1,16 @@
-
 {
-  "compilerOptions": {
-    "target": "es2024",
-    "module": "esnext",
-    "stripInternal": true,
-    "moduleResolution": "bundler",
-    "noEmit": true,
-    "checkJs": true,
-    "declaration": true,
-    "allowJs": true,
-    "alwaysStrict": true,
-    "resolvePackageJsonExports": true,
-    "resolvePackageJsonImports": true,
-    "resolveJsonModule": true
-  }
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "preserve",
+		"stripInternal": true,
+		"moduleResolution": "bundler",
+		"noEmit": true,
+		"checkJs": true,
+		"declaration": true,
+		"allowJs": true,
+		"alwaysStrict": true,
+		"resolvePackageJsonExports": true,
+		"resolvePackageJsonImports": true,
+		"resolveJsonModule": true
+	}
 }

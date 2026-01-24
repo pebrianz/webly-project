@@ -41,11 +41,7 @@ function trigger(target, key) {
 	if (dep) for (const eff of dep) eff();
 }
 
-/**
- * @template T extends object
- * @param {T} target
- * @returns {T}
- */
+/** @type {import("./types.d.ts").observe} */
 export function observe(target) {
 	if (typeof target !== "object" || target === null) return target;
 	return new Proxy(target, {

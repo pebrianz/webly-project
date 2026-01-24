@@ -1,6 +1,9 @@
-import { Rebind, observe, watch } from "@webly/rebind";
-import { isClassConstructor } from "./utils.js";
-import { defineComponent, matchDynamicRoute, moveChildNodes } from "./utils.js";
+import { observe, Rebind, watch } from "@webly/rebind";
+import {
+	defineComponent,
+	isClassConstructor,
+	matchDynamicRoute,
+} from "./utils.js";
 
 const navigateType = {
 	/**
@@ -57,9 +60,6 @@ export class Router {
 		new Rebind(this.#root)
 			.directives({
 				"router-view": ({ element }) => {
-					/** @type {((c: HTMLElement) => void) | null} */
-					let update = null;
-
 					const fragmentChildNodes = document.createDocumentFragment();
 					fragmentChildNodes.append(...element.childNodes);
 
@@ -79,16 +79,12 @@ export class Router {
 
 						const component = new constr();
 
-						new Rebind(component).state(Object.freeze({ $params: this.#params})).run()
-
-						if (update) return update(component);
+						new Rebind(component)
+							.state(Object.freeze({ $params: this.#params }))
+							.run();
 
 						element.replaceChildren(component);
 					});
-
-					update = (component) => {
-						element.replaceChildren(component);
-					};
 				},
 			})
 			.run();

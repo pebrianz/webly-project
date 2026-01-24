@@ -60,8 +60,6 @@ Each package can be used independently.
 
 Webly does not aim to:
 - Replace existing frameworks entirely
-- Hide platform primitives behind heavy abstractions
-- Provide implicit or magic behavior
 - Enforce a single architectural style
 
 ---

@@ -1,45 +1,55 @@
-/// <reference types="vite/client" />
-
-type NodeWithScopes<element extends Node = HTMLElement> = element & {
+/** @internal */
+declare type NodeWithScopes<element extends Node = HTMLElement> = element & {
 	scopes?: State[];
 };
 
-type Directive = (params: {
+export type Directive = (params: {
 	element: HTMLElement;
 	value: string;
-	scopedState: ScopedState;
+	state: ScopedState;
 	rootState: State;
-	scopes: State[];
 	plugins: Plugin[];
+	config: Config;
 	directives: Directives;
-	[key: string]: unknown;
+	[key: PropertyKey]: unknown;
 }) => void;
 
-type Directives = Record<string, Directive>;
+export type Directives = Record<PropertyKey, Directive>;
 
-export function observe<T extends object>(target: T): T;
+declare function interp<T extends Record<PropertyKey, unknown>>(
+	text: string,
+	data: T,
+): string;
 
-type State = ReturnType<typeof observe>;
+declare function parseFnCall(
+	str: string,
+	json?: { parse: JsonParse; reviver: JsonReviver },
+): [string, unknown[]];
 
-export function createScopedState(scopes: State[]): Record<string, unknown>;
+declare function observe<T extends object>(target: T): T;
 
-type ScopedState = ReturnType<typeof createScopedState>;
+export type State = ReturnType<typeof observe>;
 
-type DirectiveExtraArgs = Record<string, unknown>;
+export type ScopedState = Record<PropertyKey, unknown>;
 
-type Plugin = (params: {
+/** @internal */
+type DirectiveExtraArgs = Record<PropertyKey, unknown>;
+
+export type Plugin = (params: {
 	element: HTMLElement;
-	scopedState: ScopedState;
+	state: ScopedState;
+	config: Config;
 	rootState: State;
-	scopes: State[];
 	directives: Directives;
 	directiveExtraArgs: DirectiveExtraArgs;
 }) => DirectiveExtraArgs;
 
-export class Rebind {
-	constructor(selectors: Node | string);
-	state(...state: State[]): this;
-	plugin(plugin: Plugin[]): this;
-	directives(directives: Directives): this;
-	run(): Promise<void>;
-}
+export type JsonReviver = ((this: any, key: string, value: any) => any) | null;
+
+export type JsonParse<T = any> = (text: string, reviver?: JsonReviver) => T;
+
+export type Config = Partial<{
+	jsonParse: JsonParse;
+	jsonRevier: JsonReviver;
+	clean: { scopes: boolean; directives: boolean };
+}>;
