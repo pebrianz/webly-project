@@ -1,3 +1,3 @@
-export { Rebind } from "./main.js";
-export { createScopedState, interpolate, parseFunctionCall } from "./utils.js";
-export { watch, observe } from "./reactive.js";
+export { observe, watch } from "./reactive.js";
+export { Rebind } from "./rebind.js";
+export { interp, parseFnCall, scopedState } from "./utils.js";

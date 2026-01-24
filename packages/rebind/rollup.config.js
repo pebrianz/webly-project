@@ -1,11 +1,29 @@
+// @ts-check
+import { defineConfig } from "rollup";
 import { dts } from "rollup-plugin-dts";
 
-const config = [
-  {
-    input: "./src/index.js",
-    output: [{ file: "dist/index.d.ts", format: "es" }],
-    plugins: [dts()],
-  },
-];
-
-export default config;
+export default defineConfig([
+	{
+		input: "./src/index.js",
+		output: [
+			{
+				dir: "dist/es/types",
+				format: "es",
+				preserveModules: true,
+				preserveModulesRoot: "src",
+			},
+		],
+		plugins: [dts()],
+	},
+	{
+		input: "./src/index.js",
+		output: [
+			{
+				dir: "dist/bundle/types",
+				format: "es",
+				preserveModulesRoot: "src",
+			},
+		],
+		plugins: [dts()],
+	},
+]);

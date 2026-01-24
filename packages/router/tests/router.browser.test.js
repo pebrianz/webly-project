@@ -1,12 +1,12 @@
-import { describe, it, expect } from "vitest";
+import { Router } from "@webly/router/bundle";
 import dedent from "dedent";
-import { Router } from "../dist/index.js";
+import { describe, expect, it } from "vitest";
 
 describe("router", async () => {
 	it("should render correct component for the given route", async () => {
 		document.body.innerHTML = dedent`
 			<main @router-view></main>
-		`
+		`;
 		class AppHome extends HTMLElement {
 			constructor() {
 				super();
@@ -16,7 +16,7 @@ describe("router", async () => {
 
 		new Router(document.body)
 			.routes({
-				"/":  async () => AppHome,
+				"/": async () => AppHome,
 			})
 			.start();
 
@@ -26,9 +26,9 @@ describe("router", async () => {
 			serializableShadowRoots: true,
 		});
 		const expectedResult =
-			dedent`<main @router-view="">` +
+			dedent`<main>` +
 			`<app-home>` +
-			`<h1 @text="Hello World">Hello World</h1>` +
+			`<h1>Hello World</h1>` +
 			`</app-home>` +
 			`</main>`;
 		expect(renderedResult).toBe(expectedResult);

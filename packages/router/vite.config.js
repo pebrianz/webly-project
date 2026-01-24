@@ -1,12 +1,12 @@
-import { defineConfig} from "vite"
+import { defineConfig } from "vite";
 
 export default defineConfig({
-  build: {
-    lib: {
-      entry: "./src/index.js",
-      fileName: "index",
-      name: "index"
-    },
-    minify: "terser",
-  }
-})
+	build: {
+		lib: {
+			entry: "./src/index.js",
+			fileName: "index",
+			name: "index",
+		},
+		minify: "terser",
+	},
+});

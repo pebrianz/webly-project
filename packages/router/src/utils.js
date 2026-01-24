@@ -1,4 +1,7 @@
-/**@param {CustomElementConstructor} componentConstructor */
+/**
+ * @internal
+ * @param {CustomElementConstructor} componentConstructor
+ */
 export function defineComponent(componentConstructor) {
 	if (customElements.getName(componentConstructor)) return;
 	customElements.define(
@@ -7,19 +10,19 @@ export function defineComponent(componentConstructor) {
 	);
 }
 
-/**
- * @internal
- * @param {HTMLElement} component
- * @param {NodeListOf<ChildNode>} childNodes
- * @returns {void}
- */
-export function moveChildNodes(component, childNodes) {
-	if (childNodes.length !== 0) {
-		if (!(component.shadowRoot instanceof ShadowRoot)) {
-			component.replaceChildren(...childNodes);
-		}
-	}
-}
+// /**
+//  * @internal
+//  * @param {HTMLElement} component
+//  * @param {NodeListOf<ChildNode>} childNodes
+//  * @returns {void}
+//  */
+// export function moveChildNodes(component, childNodes) {
+// 	if (childNodes.length !== 0) {
+// 		if (!(component.shadowRoot instanceof ShadowRoot)) {
+// 			component.replaceChildren(...childNodes);
+// 		}
+// 	}
+// }
 
 /** @internal */
 export function isClassConstructor(ctr) {

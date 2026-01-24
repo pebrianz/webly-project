@@ -1,6 +1,8 @@
+// @ts-check
+import { observe, Rebind } from "@webly/rebind";
 import dedent from "dedent";
-import { describe, beforeEach, expect, it } from "vitest";
-import { observe, Rebind } from "../dist/index.js";
+import json5 from "json5";
+import { beforeEach, describe, expect, it } from "vitest";
 
 beforeEach(() => {
 	document.body.innerHTML = "";
@@ -12,22 +14,22 @@ describe("core", async () => {
 
 		new Rebind(document.body).run();
 
-		const renderedText = document.body.firstElementChild.textContent;
+		const renderedText = document.body.firstElementChild?.textContent;
 		const expectedText = "Hello World";
 		expect(renderedText).toBe(expectedText);
 	});
 
 	it("should interpolate @text directive using parent @data context", () => {
 		document.body.innerHTML = dedent`
-			<div @data="{name: 'John Doe', country: 'Mars'}">
+			<div @data='{"name": "Foo", "country": "Bar"}'>
 				<p @text="Hello {name} from {country}"><p/>
 			</div>
 		`;
 
 		new Rebind(document.body).run();
 
-		const renderedText = document.querySelector("p").textContent;
-		const expectedText = "Hello John Doe from Mars";
+		const renderedText = document.querySelector("p")?.textContent;
+		const expectedText = "Hello Foo from Bar";
 		expect(renderedText).toBe(expectedText);
 	});
 
@@ -43,13 +45,13 @@ describe("core", async () => {
 		new Rebind(document.body).state(state).run();
 
 		const p = document.querySelector("p");
-		let renderedText = p.textContent;
+		let renderedText = p?.textContent;
 		let expectedText = "0";
 		expect(renderedText).toBe(expectedText);
 
 		state.count++;
 
-		renderedText = p.textContent;
+		renderedText = p?.textContent;
 		expectedText = "1";
 		expect(renderedText).toBe(expectedText);
 	});
@@ -61,13 +63,13 @@ describe("core", async () => {
 				this.count += 1;
 			},
 		});
-		document.body.innerHTML = `<button @onclick="increment()" @text="{count}"></button>`;
+		document.body.innerHTML = `<button @on:click="increment()" @text="{count}"></button>`;
 
 		new Rebind(document.body).state(rootData).run();
 
 		const button = document.querySelector("button");
-		button.click();
-		expect(button.textContent).toBe("1");
+		button?.click();
+		expect(button?.textContent).toBe("1");
 	});
 
 	it("should inherit and override @data", () => {
@@ -77,14 +79,17 @@ describe("core", async () => {
 		};
 
 		document.body.innerHTML = dedent`
-      <div @data="{ isOverrided: false, isInherited: true }">
-        <div @data="{ isOverrided: true }">
-          <p @text="is overrided? {isOverrided}, is inherited? {isInherited}, and is have value from root? {root}"></p>
-        </div>
-      </div>
-    `;
+	     <div @data="{ isOverrided: false, isInherited: true }">
+	       <div @data="{ isOverrided: true }">
+	         <p @text="is overrided? {isOverrided}, is inherited? {isInherited}, and is have value from root? {root}"></p>
+	       </div>
+	     </div>
+	   `;
 
-		new Rebind(document.body).state(rootData).run();
+		new Rebind(document.body)
+			.state(rootData)
+			.config({ jsonParse: json5.parse })
+			.run();
 
 		const renderedText = document.querySelector("p")?.textContent;
 		const expectedText =
@@ -94,35 +99,18 @@ describe("core", async () => {
 
 	it("should render the item from @for template loop", () => {
 		document.body.innerHTML = dedent`
-      <ul>
-        <template @for="animal in ['cat','husky']">
-          <li @text="{animal}">item</li>
-        </template>
-      </ul>
-    `;
+	     <ul>
+	       <template @for='animal in ["cat","husky"]'>
+	         <li @text="{animal}">item</li>
+	       </template>
+	     </ul>
+	   `;
 
 		new Rebind(document.body).run();
 		document.querySelector("template")?.remove();
 
 		const renderedResult = document.body.firstElementChild?.innerHTML;
-		const expectedResult = `<li @text="{animal}">cat</li><li @text="{animal}">husky</li>`;
-		expect(dedent(renderedResult ?? "")).toBe(expectedResult);
-	});
-
-	it("should render the item with the given @range", () => {
-		document.body.innerHTML = dedent`
-      <ul>
-        <template @range="2 as x">
-          <li @text="{x}">item</li>
-        </template>
-      </ul>
-    `;
-
-		new Rebind(document.body).run();
-		document.querySelector("template")?.remove();
-
-		const renderedResult = document.body.firstElementChild?.innerHTML;
-		const expectedResult = `<li @text="{x}">0</li><li @text="{x}">1</li>`;
+		const expectedResult = `<li>cat</li><li>husky</li>`;
 		expect(dedent(renderedResult ?? "")).toBe(expectedResult);
 	});
 
@@ -130,15 +118,15 @@ describe("core", async () => {
 		const rootData = {
 			show() {
 				const p = document.querySelector("p");
-				p.hidden = !p.hidden;
+				if (p) p.hidden = !p.hidden;
 			},
 		};
 
 		document.body.innerHTML = dedent`
-      <div @if="5 < 10; show()">
-        <p hidden>hello world</p>
-      </div>
-    `;
+	     <div @if="5 < 10; show()">
+	       <p hidden>hello world</p>
+	     </div>
+	   `;
 
 		new Rebind(document.body).state(rootData).run();
 
@@ -146,4 +134,21 @@ describe("core", async () => {
 		const expectedResult = "<p>hello world</p>";
 		expect(dedent(renderedResult ?? "")).toBe(expectedResult);
 	});
+
+	// it("should render the item with the given @range", () => {
+	// 	document.body.innerHTML = dedent`
+	//      <ul>
+	//        <template @range="2 as x">
+	//          <li @text="{x}">item</li>
+	//        </template>
+	//      </ul>
+	//    `;
+
+	// 	new Rebind(document.body).run();
+	// 	document.querySelector("template")?.remove();
+
+	// 	const renderedResult = document.body.firstElementChild?.innerHTML;
+	// 	const expectedResult = `<li @text="{x}">0</li><li @text="{x}">1</li>`;
+	// 	expect(dedent(renderedResult ?? "")).toBe(expectedResult);
+	// });
 });

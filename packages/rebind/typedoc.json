@@ -1,0 +1,10 @@
+{
+	"includeVersion": true,
+	"entryPoints": [
+		"./src/index.js",
+		"./src/types.d.ts",
+		"./src/rebind.js",
+		"./src/reactive.js",
+		"./src/utils.js"
+	]
+}
