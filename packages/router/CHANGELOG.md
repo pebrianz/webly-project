@@ -1,5 +1,16 @@
 # @webly/router
 
+## 0.3.0
+
+### Minor Changes
+
+- [#11](https://github.com/pebrianz/webly-project/pull/11) [`986d4c3`](https://github.com/pebrianz/webly-project/commit/986d4c3d5f00d1e1d47a6cc140df6cc591b89623) Thanks [@pebrianz](https://github.com/pebrianz)! - .
+
+### Patch Changes
+
+- Updated dependencies [[`986d4c3`](https://github.com/pebrianz/webly-project/commit/986d4c3d5f00d1e1d47a6cc140df6cc591b89623)]:
+  - @webly/rebind@0.2.0
+
 ## 0.2.0
 
 ### Minor Changes
