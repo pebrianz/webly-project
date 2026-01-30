@@ -1,0 +1,5 @@
+---
+"@webly/router": patch
+---
+
+.
