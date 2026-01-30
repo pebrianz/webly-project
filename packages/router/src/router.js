@@ -60,9 +60,6 @@ export class Router {
 		new Rebind(this.#root)
 			.directives({
 				"router-view": ({ element }) => {
-					const fragmentChildNodes = document.createDocumentFragment();
-					fragmentChildNodes.append(...element.childNodes);
-
 					watch(async () => {
 						const componentConstructor = this.#currentRoute.view;
 						if (!componentConstructor) return;
