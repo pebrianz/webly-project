@@ -66,7 +66,6 @@ export class Router {
 					watch(async () => {
 						const componentConstructor = this.#currentRoute.view;
 						if (!componentConstructor) return;
-
 						let constr = /** @type {CustomElementConstructor} */ (
 							componentConstructor
 						);
@@ -83,7 +82,14 @@ export class Router {
 							.state(Object.freeze({ $params: this.#params }))
 							.run();
 
-						element.replaceChildren(component);
+						if (!document.startViewTransition) {
+							element.replaceChildren(component);
+							return;
+						}
+						
+						document.startViewTransition(() =>
+							element.replaceChildren(component),
+						);
 					});
 				},
 			})
