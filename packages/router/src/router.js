@@ -86,7 +86,7 @@ export class Router {
 							element.replaceChildren(component);
 							return;
 						}
-						
+
 						document.startViewTransition(() =>
 							element.replaceChildren(component),
 						);
