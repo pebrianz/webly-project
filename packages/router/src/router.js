@@ -75,6 +75,13 @@ export class Router {
 
 						const component = new constr();
 
+						if (
+							element.children.length > 0 &&
+							element.firstElementChild.nodeName === component.nodeName
+						) {
+							return;
+						}
+
 						new Rebind(component)
 							.state(Object.freeze({ $params: this.#params }))
 							.run();
