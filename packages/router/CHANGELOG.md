@@ -1,5 +1,11 @@
 # @webly/router
 
+## 0.4.1
+
+### Patch Changes
+
+- [#15](https://github.com/pebrianz/webly-project/pull/15) [`4024cef`](https://github.com/pebrianz/webly-project/commit/4024cef93a808b1a2c1a70db45edc848a7bdff83) Thanks [@pebrianz](https://github.com/pebrianz)! - .
+
 ## 0.4.0
 
 ### Minor Changes
