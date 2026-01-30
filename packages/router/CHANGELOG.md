@@ -1,5 +1,11 @@
 # @webly/router
 
+## 0.4.0
+
+### Minor Changes
+
+- [#13](https://github.com/pebrianz/webly-project/pull/13) [`4513ffb`](https://github.com/pebrianz/webly-project/commit/4513ffb786117a560c31358a7ec1db3fc183f09d) Thanks [@pebrianz](https://github.com/pebrianz)! - support view transition
+
 ## 0.3.0
 
 ### Minor Changes
