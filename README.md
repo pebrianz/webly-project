@@ -23,7 +23,6 @@ Each package documents its public APIs, usage examples, and design constraints.
 
 - Make web development easy and approachable
 - Reduce unnecessary abstraction and boilerplate
-- Provide clear and predictable reactive primitives
 - Enable modular adoption without lock-in
 - Maintain strong TypeScript support with minimal verbosity
 
