@@ -83,7 +83,12 @@ export class Router {
 						}
 
 						new Rebind(component)
-							.state(Object.freeze({ $params: this.#params }))
+							.state(
+								Object.freeze({
+									$params: this.#params,
+									$navigate: this.navigate,
+								}),
+							)
 							.run();
 
 						if (!document.startViewTransition) {

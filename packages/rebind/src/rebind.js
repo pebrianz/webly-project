@@ -140,7 +140,14 @@ export class Rebind {
 					watch(() => {
 						currentNode.setAttribute(name.slice(2), interp(value, state));
 					});
-				} else if (name.startsWith("@on:")) {
+
+					if (this.#config.clean.directives) {
+						currentNode.removeAttribute(name);
+					}
+					continue;
+				}
+
+				if (name.startsWith("@on:")) {
 					const handler = /** @param {Event} e */ (e) => {
 						const newState = scopedState([state, { $event: e }]);
 						const [fnName, fnArgs] = parseFnCall(value);
@@ -161,6 +168,11 @@ export class Rebind {
 					cleanup = () => {
 						currentNode.removeEventListener(event, handler);
 					};
+
+					if (this.#config.clean.directives) {
+						currentNode.removeAttribute(name);
+					}
+					continue;
 				}
 
 				const directive = /** @type {import("./types.d.ts").Directive} */ (
