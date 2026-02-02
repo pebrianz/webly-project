@@ -70,7 +70,6 @@ export class Rebind {
 		return this;
 	}
 
-	/** @returns {Promise<void>} */
 	run() {
 		const _root = this.#root;
 		const _config = this.#config;
@@ -203,7 +202,5 @@ export class Rebind {
 			}
 			// element
 		}
-
-		return Promise.resolve();
 	}
 }
