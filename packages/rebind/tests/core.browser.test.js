@@ -22,7 +22,7 @@ describe("core", async () => {
 	it("should interpolate @text directive using parent @data context", () => {
 		document.body.innerHTML = dedent`
 			<div @data='{"name": "Foo", "country": "Bar"}'>
-				<p @text="Hello {name} from {country}"><p/>
+				<p @text="Hello {name} from {country}"></p>
 			</div>
 		`;
 
@@ -33,13 +33,35 @@ describe("core", async () => {
 		expect(renderedText).toBe(expectedText);
 	});
 
+	it("should skip element when element have @skip", () => {
+		document.body.innerHTML = dedent`
+			<div @skip>
+				<p @text="this will skiped"></p>
+			</div>
+			<p @text="hello world"></p>
+		`;
+
+		new Rebind(document.body).run();
+
+		const renderedResult = document.body.getHTML();
+		const expectedResult = dedent`
+			<div>
+				<p @text="this will skiped"></p>
+			</div>
+			<p>hello world</p>
+		`;
+		expect(renderedResult).toBe(expectedResult);
+	});
+
 	it("should update text when state change", () => {
 		const state = observe({
-			count: 0,
+			data: { count: { value: 0 } },
 		});
 
 		document.body.innerHTML = dedent`
-			<p @text="{count}"></p>
+			<div @data="data.count">
+				<p @text="{value}"></p>
+			</div>
 		`;
 
 		new Rebind(document.body).state(state).run();
@@ -49,7 +71,7 @@ describe("core", async () => {
 		let expectedText = "0";
 		expect(renderedText).toBe(expectedText);
 
-		state.count++;
+		state.data.count.value++;
 
 		renderedText = p?.textContent;
 		expectedText = "1";
@@ -99,14 +121,23 @@ describe("core", async () => {
 
 	it("should render the item from @for template loop", () => {
 		document.body.innerHTML = dedent`
-	     <ul>
-	       <template @for='animal in ["cat","husky"]'>
-	         <li @text="{animal}">item</li>
+	     <ul @data="data">
+	       <template @for='animal in animals'>
+	         <li @text="{animal.name}">item</li>
 	       </template>
 	     </ul>
 	   `;
 
-		new Rebind(document.body).run();
+		new Rebind(document.body)
+			.state({
+				data: {
+					animals: [
+						{ name: "cat", tail: true },
+						{ name: "husky", tail: true },
+					],
+				},
+			})
+			.run();
 		document.querySelector("template")?.remove();
 
 		const renderedResult = document.body.firstElementChild?.innerHTML;
