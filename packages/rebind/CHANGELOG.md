@@ -1,5 +1,17 @@
 # @webly/rebind
 
+## 0.3.0
+
+### Minor Changes
+
+- [#19](https://github.com/pebrianz/webly-project/pull/19) [`246c0ad`](https://github.com/pebrianz/webly-project/commit/246c0add8af7a860725e1bfa6e239f090724fc18) Thanks [@pebrianz](https://github.com/pebrianz)! - .
+
+## 0.2.0
+
+### Minor Changes
+
+- [#11](https://github.com/pebrianz/webly-project/pull/11) [`986d4c3`](https://github.com/pebrianz/webly-project/commit/986d4c3d5f00d1e1d47a6cc140df6cc591b89623) Thanks [@pebrianz](https://github.com/pebrianz)! - .
+
 ## 0.1.1
 
 ### Patch Changes

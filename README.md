@@ -1,8 +1,8 @@
 # Webly Project
 
-**A set of lightweight libraries focused on simplicity for building simple and predictable web applications.**
+**A set of lightweight libraries focused on simplicity for building simple web applications.**
 
-Webly Project is a modular web development ecosystem that provides simple, predictable building blocks for creating modern web applications.  
+Webly Project is a modular web development ecosystem that provides simple building blocks for creating modern web applications.  
 It focuses on clarity, composability, and control, without forcing a monolithic framework or complex tooling.
 
 Webly is designed to be adopted incrementally. Each library can be used independently or combined to form a complete application architecture.
@@ -23,7 +23,6 @@ Each package documents its public APIs, usage examples, and design constraints.
 
 - Make web development easy and approachable
 - Reduce unnecessary abstraction and boilerplate
-- Provide clear and predictable reactive primitives
 - Enable modular adoption without lock-in
 - Maintain strong TypeScript support with minimal verbosity
 
