@@ -1,5 +1,0 @@
----
-"@webly/rebind": minor
----
-
-.
