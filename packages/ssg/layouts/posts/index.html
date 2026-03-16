@@ -1,0 +1,14 @@
+<head @data="{title: 'hello'}">
+  <title @text="{title}"></title>
+</head>
+
+<body>
+  <h1 @text="{data.title}"></h1>
+  <ul>
+    <template @for="page in pages">
+      <li @data="page.data">
+        <a @:href="{page.permalink}" @text="{title}"></a>
+      </li>
+    </template>
+  </ul>
+</body>

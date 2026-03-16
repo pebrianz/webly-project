@@ -36,7 +36,7 @@ export function interp(text, data) {
 		let value = Reflect.get(data, keys[0]);
 		let i = 1;
 		while (i < keys.length) {
-			value = Reflect.get(data, keys[i]);
+			value = Reflect.get(/** @type {object} */ (value), keys[i]);
 			i++;
 		}
 		return `${value}`;
@@ -52,4 +52,9 @@ export function parseFnCall(
 	if (!name) return ["", []];
 	const args = json.parse(`[${strArgs.split(",").join(",")}]`, json.reviver);
 	return [name, args];
+}
+
+/** @param {string} str */
+export function isJSON(str) {
+	return str[0] === "[" || str[0] === "{";
 }

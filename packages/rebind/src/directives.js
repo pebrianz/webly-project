@@ -1,6 +1,6 @@
 import { watch } from "./reactive.js";
 import { Rebind } from "./rebind.js";
-import { interp, parseFnCall } from "./utils.js";
+import { interp, isJSON, parseFnCall } from "./utils.js";
 
 /** @type {Record<string, (a: any, b: any) => boolean>} */
 const operators = {
@@ -43,6 +43,23 @@ export const directives = {
 			if (fn) fn.apply(state, fnArgs);
 		});
 	},
+	"use-template": ({ element, value }) => {
+		watch(() => {
+			const template = /** @type {HTMLTemplateElement} */ (
+				document.querySelector(value)
+			);
+			element.replaceChildren(document.importNode(template.content, true));
+		});
+	},
+	html: ({ element, value, state }) => {
+		watch(() => {
+			const html =
+				value[0] === "{" && value[value.length - 1] === "}"
+					? interp(value, state)
+					: value;
+			element.innerHTML = html;
+		});
+	},
 	for: ({ element, value, directives, state, config, plugins }) => {
 		const template = /** @type {HTMLTemplateElement} */ (element);
 
@@ -51,7 +68,12 @@ export const directives = {
 
 		watch(() => {
 			const [key, json] = value.split(/\s+in\s+/);
-			const object = config.jsonParse(json);
+			let object;
+			if (isJSON(json)) {
+				object = config.jsonParse(json, config.jsonRevier);
+			} else {
+				object = state[json.trimEnd()];
+			}
 			const fragment = document.createDocumentFragment();
 
 			for (const k in object) {
@@ -81,7 +103,7 @@ export const directives = {
 		});
 
 		update = async (fragment) => {
-			await new Rebind(fragment)
+			new Rebind(fragment)
 				.directives(directives)
 				.config({ ...config })
 				.state(state)
