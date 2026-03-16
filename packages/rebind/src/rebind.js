@@ -1,6 +1,6 @@
 import { directives } from "./directives.js";
 import { observe, watch } from "./reactive.js";
-import { interp, parseFnCall, scopedState } from "./utils.js";
+import { interp, isJSON, parseFnCall, scopedState } from "./utils.js";
 
 export class Rebind {
 	/**
@@ -70,7 +70,6 @@ export class Rebind {
 		return this;
 	}
 
-	/** @returns {Promise<void>} */
 	run() {
 		const _root = this.#root;
 		const _config = this.#config;
@@ -79,15 +78,23 @@ export class Rebind {
 		const _state = this.#state;
 		const walker = document.createTreeWalker(_root, Node.ELEMENT_NODE);
 
-		while (walker.nextNode()) {
+		let nextNode = walker.nextNode();
+
+		while (nextNode) {
 			const currentNode =
 				/** @type {import("./types.d.ts").NodeWithScopes<HTMLElement>} */ (
-					walker.currentNode
+					nextNode
 				);
 			const parentNode =
 				/** @type {import("./types.d.ts").NodeWithScopes<HTMLElement>} */ (
 					currentNode.parentNode
 				);
+
+			if (currentNode.hasAttribute("@skip")) {
+				if (this.#config.clean.directives) currentNode.removeAttribute("@skip");
+				nextNode = walker.nextSibling();
+				continue;
+			}
 
 			if (!currentNode.scopes) currentNode.scopes = [];
 			currentNode.scopes.unshift(...(parentNode.scopes ?? []));
@@ -98,10 +105,22 @@ export class Rebind {
 				$selectAll: (selectors) => currentNode.querySelectorAll(selectors),
 			});
 
-			const data = currentNode.getAttribute("@data") ?? "{}";
-			currentNode.scopes.push(
-				observe(_config.jsonParse(data, _config.jsonRevier)),
-			);
+			const json = currentNode.getAttribute("@data") ?? "{}";
+			let data;
+			if (isJSON(json)) {
+				data = _config.jsonParse(json, _config.jsonRevier);
+			} else {
+				data = scopedState([_state, ...currentNode.scopes]);
+				const keys = json.trimEnd().split(".");
+				let value = Reflect.get(data, keys[0]);
+				let i = 1;
+				while (i < keys.length) {
+					value = Reflect.get(/** @type {object} */ (value), keys[i]);
+					i++;
+				}
+				data = value;
+			}
+			currentNode.scopes.push(observe(data));
 
 			const state = scopedState([_state, ...currentNode.scopes]);
 			const init = currentNode.getAttribute("@init");
@@ -134,20 +153,15 @@ export class Rebind {
 			}
 
 			for (const { name, value } of currentNode.attributes) {
-				if (!name.startsWith("@")) continue;
+				if (name[0] !== "@") continue;
 
 				if (name.startsWith("@:")) {
-					watch(() => {
-						currentNode.setAttribute(name.slice(2), interp(value, state));
-					});
-
-					if (this.#config.clean.directives) {
-						currentNode.removeAttribute(name);
-					}
-					continue;
-				}
-
-				if (name.startsWith("@on:")) {
+					// handle attribute
+					watch(() =>
+						currentNode.setAttribute(name.slice(2), interp(value, state)),
+					);
+				} else if (name.startsWith("@on:")) {
+					// handle event listener
 					const handler = /** @param {Event} e */ (e) => {
 						const newState = scopedState([state, { $event: e }]);
 						const [fnName, fnArgs] = parseFnCall(value);
@@ -165,45 +179,32 @@ export class Rebind {
 						currentNode.addEventListener(event, handler);
 					});
 
-					cleanup = () => {
-						currentNode.removeEventListener(event, handler);
-					};
-
-					if (this.#config.clean.directives) {
-						currentNode.removeAttribute(name);
-					}
-					continue;
+					cleanup = () => currentNode.removeEventListener(event, handler);
+				} else {
+					const directive = /** @type {import("./types.d.ts").Directive} */ (
+						{ ...directives, ..._directives }[name.slice(1)]
+					);
+					if (directive)
+						directive({
+							value,
+							element: currentNode,
+							state,
+							config: _config,
+							directives: _directives,
+							rootState: _state,
+							plugins: _plugins,
+							...directiveExtraArgs,
+						});
 				}
 
-				const directive = /** @type {import("./types.d.ts").Directive} */ (
-					{ ...directives, ..._directives }[name.slice(1)]
-				);
-				if (!directive) continue;
-
-				directive({
-					value,
-					element: currentNode,
-					state,
-					config: _config,
-					directives: _directives,
-					rootState: _state,
-					plugins: _plugins,
-					...directiveExtraArgs,
-				});
-
-				if (this.#config.clean.directives) {
-					currentNode.removeAttribute(name);
-				}
-				// attributes
-			}
+				if (this.#config.clean.directives) currentNode.removeAttribute(name);
+			} // end of loop attributes
 
 			if (this.#config.clean.scopes) {
 				if (currentNode.hasChildNodes) parentNode.scopes = [];
 				else currentNode.scopes = [];
 			}
-			// element
-		}
-
-		return Promise.resolve();
+			nextNode = walker.nextNode();
+		} // end of loop node
 	}
 }
