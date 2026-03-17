@@ -1,7 +1,11 @@
+#!/usr/bin/env node
+
 import fs from "node:fs/promises";
 import path from "node:path";
 
 import matter from "gray-matter";
+import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
 import { WorkerPool } from "./worker_pool.js";
 
 async function loadContentPages(root) {
@@ -113,8 +117,27 @@ async function runBuild({ root, outDir, worker_pool_size }) {
 	await worker.destroy();
 }
 
-await runBuild({
-	root: process.cwd(),
-	outDir: "dist",
-	worker_pool_size: 1,
-});
+yargs(hideBin(process.argv))
+	.command(
+		"build",
+		"",
+		() => {},
+		(argv) => {
+			runBuild({
+				root: process.cwd(),
+				outDir: argv.outdir,
+				worker_pool_size: argv.worker,
+			});
+		},
+	)
+	.option("worker", {
+		alias: "w",
+		type: "number",
+		default: 1,
+	})
+	.option("outdir", {
+		alias: "o",
+		type: "string",
+		default: "dist",
+	})
+	.parse();

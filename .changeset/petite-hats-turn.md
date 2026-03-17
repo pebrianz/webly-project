@@ -1,0 +1,5 @@
+---
+"@webly/ssg": minor
+---
+
+initial
