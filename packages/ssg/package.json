@@ -7,6 +7,9 @@
 		"name": "pebrianz",
 		"url": "https://github.com/pebrianz"
 	},
+	"bin": {
+		"ssg": "./src/ssg.js"
+	},
 	"license": "Apache-2.0",
 	"homepage": "https://github.com/pebrianz/webly-project#readme",
 	"publishConfig": {
@@ -21,7 +24,7 @@
 		"url": "https://github.com/pebrianz/webly-project/issues"
 	},
 	"files": [
-		"dist",
+		"src",
 		"LICENSE",
 		"README.md"
 	],
@@ -33,42 +36,21 @@
 		"javascript",
 		"js"
 	],
-	"exports": {
-		"./bundle": {
-			"types": "./dist/bundle/types/index.d.ts",
-			"import": "./dist/bundle/index.js",
-			"require": "./dist/bundle/index.cjs"
-		},
-		"./min": {
-			"types": "./dist/min/types/index.d.ts",
-			"import": "./dist/min/index.js",
-			"require": "./dist/min/index.cjs"
-		},
-		".": {
-			"types": "./dist/es/types/index.d.ts",
-			"import": "./dist/es/index.js",
-			"require": "./dist/es/index.cjs"
-		},
-		"./ssg": {
-			"types": "./dist/es/types/ssg.d.ts",
-			"import": "./dist/es/ssg.js",
-			"require": "./dist/es/ssg.cjs"
-		}
-	},
 	"scripts": {
 		"biome:ci": "pnpm -w biome ci packages/ssg",
 		"lint": "npm run biome:ci",
 		"typecheck": "tsc",
-		"build:bundle": "vite build -c vite.config.bundle.js",
-		"build:min": "vite build -c vite.config.min.js",
-		"build:es": "vite build -c vite.config.es.js",
-		"build:types": "rollup -c",
-		"build": "(npm run build:es && npm run build:bundle && npm run build:min) && npm run build:types",
 		"dev": "npm run build && pnpm -w dev ssg",
 		"test": "pnpm -w test ssg",
-		"ci": "npm run lint && npm run typecheck"
+		"ci": "npm run lint && npm run typecheck "
 	},
 	"dependencies": {
-		"@webly/rebind": "workspace:*"
+		"@webly/rebind": "workspace:*",
+		"gray-matter": "^4.0.3",
+		"highlight.js": "^11.11.1",
+		"json5": "^2.2.3",
+		"marked": "^17.0.1",
+		"marked-highlight": "^2.2.3",
+		"yargs": "^18.0.0"
 	}
 }
