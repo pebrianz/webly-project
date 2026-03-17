@@ -36,37 +36,13 @@
 		"javascript",
 		"js"
 	],
-	"exports": {
-		"./bundle": {
-			"types": "./dist/bundle/types/index.d.ts",
-			"import": "./dist/bundle/index.js",
-			"require": "./dist/bundle/index.cjs"
-		},
-		"./min": {
-			"types": "./dist/min/types/index.d.ts",
-			"import": "./dist/min/index.js",
-			"require": "./dist/min/index.cjs"
-		},
-		".": {
-			"types": "./dist/es/types/index.d.ts",
-			"import": "./dist/es/index.js",
-			"require": "./dist/es/index.cjs"
-		},
-		"./ssg": {
-			"types": "./dist/es/types/ssg.d.ts",
-			"import": "./dist/es/ssg.js",
-			"require": "./dist/es/ssg.cjs"
-		}
-	},
 	"scripts": {
 		"biome:ci": "pnpm -w biome ci packages/ssg",
 		"lint": "npm run biome:ci",
 		"typecheck": "tsc",
-		"build:types": "rollup -c",
-		"build": "vite build && npm run build:types",
 		"dev": "npm run build && pnpm -w dev ssg",
 		"test": "pnpm -w test ssg",
-		"ci": "npm run lint && npm run typecheck && npm run build"
+		"ci": "npm run lint && npm run typecheck "
 	},
 	"dependencies": {
 		"@webly/rebind": "workspace:*",
