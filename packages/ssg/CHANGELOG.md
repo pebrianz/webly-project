@@ -1,5 +1,11 @@
 # @webly/ssg
 
+## 0.1.0
+
+### Minor Changes
+
+- [#23](https://github.com/pebrianz/webly-project/pull/23) [`1145f77`](https://github.com/pebrianz/webly-project/commit/1145f77d62e7ad9eee2c1f936cba13b9b25b6d2a) Thanks [@pebrianz](https://github.com/pebrianz)! - initial
+
 ## 0.0.1
 
 ### Patch Changes
